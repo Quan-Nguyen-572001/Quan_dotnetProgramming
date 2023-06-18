@@ -1,162 +1,335 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace ConsoleApp1
+namespace UniManagement
 {
     class Program
     {
         static void Main(string[] args)
         {
-            // prob1
-            /*
-            Console.Write("Input your number: ");
-            int number = int.Parse(Console.ReadLine());
-            if (number > 0)
+            InitializeData();
+
+            // Perform login
+            Login();
+
+            Console.WriteLine("Program execution completed. Press any key to exit.");
+            Console.ReadKey();
+        }
+
+        static void InitializeData()
+        {
+            Department computerScienceDepartment = new Department("Computer Science", "HannamUni", "232-415-3214");
+
+            // Initialize professors
+            Professor professor1 = new Professor("P1", "Lee", "192-333-230", "lee.hannam@hnu.com", "Professor", computerScienceDepartment);
+            Professor professor2 = new Professor("P2", "Chang", "773-202-3220", "chang.hannam@hnu.com", "Professor", computerScienceDepartment);
+
+            // Initialize staff
+            Staff staff1 = new Staff("S1", "Staf1", "122-200-1313", "staf1.hannam@hnu.com", "Office Administration", 3000);
+            Staff staff2 = new Staff("S2", "Staf2", "294-945-3268", "staff2.hannam@hnu.com", "Admissions", 2500);
+
+            // Initialize subjects
+            Subject subject1 = new Subject("CS101", "Programming Practice", professor1);
+            Subject subject2 = new Subject("CS201", "Data Structures", professor1);
+            Subject subject3 = new Subject("CS301", ".net Program", professor2);
+
+            // Initialize students
+            List<Student> students = new List<Student>();
+
+            for (int i = 1; i <= 10; i++)
             {
-                Console.WriteLine("This is positive number");
+                string studentId = "S" + i.ToString("D3");
+                string studentName = "Student " + i;
+                string phoneNumber = "010-2865-1804" + i.ToString("D2");
+                string email = "student" + i + "@hnu.com";
+
+                // Create a student and enroll them in three subjects
+                Student student = new Student(studentId, studentName, phoneNumber, email, computerScienceDepartment);
+                student.EnrollSubject(subject1);
+                student.EnrollSubject(subject2);
+                student.EnrollSubject(subject3);
+
+                students.Add(student);
             }
-            else if (number < 0)
+
+            // Print the initialized data for verification
+            Console.WriteLine("Initialized Data:");
+            Console.WriteLine("-----------------");
+            Console.WriteLine();
+
+            Console.WriteLine("Department:");
+            Console.WriteLine(computerScienceDepartment);
+            Console.WriteLine();
+
+            Console.WriteLine("Professors:");
+            Console.WriteLine(professor1);
+            Console.WriteLine(professor2);
+            Console.WriteLine();
+
+            Console.WriteLine("Staff:");
+            Console.WriteLine(staff1);
+            Console.WriteLine(staff2);
+            Console.WriteLine();
+
+            Console.WriteLine("Subjects:");
+            Console.WriteLine(subject1);
+            Console.WriteLine(subject2);
+            Console.WriteLine(subject3);
+            Console.WriteLine();
+
+            Console.WriteLine("Students:");
+            foreach (var student in students)
             {
-                Console.WriteLine("This is negative number");
+                Console.WriteLine(student);
+            }
+            Console.WriteLine();
+        }
+
+        static void Login()
+        {
+            Console.WriteLine("Enter your ID:");
+            string id = Console.ReadLine();
+
+            if (IsProfessor(id))
+            {
+                ProfessorLogin(id);
+            }
+            else if (IsStudent(id))
+            {
+                StudentLogin(id);
             }
             else
             {
-                Console.WriteLine("This is number 0");
-            }
-            */
-
-            //prob2
-            /*
-            Console.Write("Input your string: ");
-            string str1 = Console.ReadLine();
-            int count = 0;
-            foreach (char c in str1)
-            {
-                if (IsVowel(c))
-                {
-                    count++;
-                }
-            }
-            Console.WriteLine($"There are {count} vowels in the string \"{str1}\"");
-            Console.ReadLine(); 
-        
-    
-        static bool IsVowel(char c)
-        {
-            switch (c)
-            {
-                case 'a':
-                case 'e':
-                case 'i':
-                case 'o':
-                case 'u':
-                    return true;
-                case 'A':
-                case 'E':
-                case 'I':
-                case 'O':
-                case 'U':
-                    return true;
-                default:
-                    return false;
+                Console.WriteLine("Wrong ID. Login failed.");
             }
         }
-        */
 
-            //prob3
-            /*
-            Console.Write("Input number: ");
-            string inp = Console.ReadLine();
-            string[] numblist = inp.Split(' ');
-            List<int> numbers = new List<int>();
-            foreach (string s in numblist)
-            {
-                int number;
-                if (int.TryParse(s, out number))
-                {
-                    if (!numbers.Contains(number))
-                    {
-                        numbers.Add(number);
-                    }
-                }
-            }
-            foreach (int i in numbers)
-            {
-                Console.Write(i + " ");
-            }
-            */
+        static bool IsProfessor(string id)
+        {
+            return id.StartsWith("P");
+        }
 
-            //prob4
-            /*
-            Console.Write("Input your string: ");
-            string inputStr = Console.ReadLine();
-            string[] words = inputStr.Split(' ');
-            Dictionary<string, int> wordCount = new Dictionary<string, int>();
-            foreach (string word in words)
-            {
-                if (wordCount.ContainsKey(word))
-                {
-                    wordCount[word]++;
-                }
-                else
-                {
-                    wordCount[word] = 1;
-                }
-            }
-            KeyValuePair<string, int> maxWord = wordCount.OrderByDescending(kvp => kvp.Value).First();
-            Console.WriteLine($"the word that appeared the most is \"{maxWord.Key}\" and it appears {maxWord.Value}");
-            Console.ReadLine();
-            */
+        static bool IsStudent(string id)
+        {
+            // Check if the ID belongs to a student
+            return id.StartsWith("S");
+        }
 
-            //prob5
-            /*
-            Console.Write("input numbers: ");
-            string input = Console.ReadLine();
-
-            string[] inputs = input.Split(' ');
-            int[] numbers = new int[inputs.Length];
-            for (int i = 0; i < inputs.Length; i++)
-            {
-                if (!int.TryParse(inputs[i],out numbers[i]))
-                {
-                    Console.WriteLine("Invalid input");
-                    return;
-                }
-            }
-            Array.Sort(numbers);
-            Console.WriteLine("Sort number is: ");
-            foreach (int number in numbers)
-            {
-                Console.Write(number + " ");
-            }
+        static void ProfessorLogin(string professorId)
+        {
+            Console.WriteLine("Professor Login Successful");
+            Console.WriteLine("--------------------------");
             Console.WriteLine();
-            */
 
-            //prob6
-            /*
-            Console.WriteLine("Input a String: ");
-            string input = Console.ReadLine();
+            Console.WriteLine("1. Search for students");
+            Console.WriteLine("2. Search for professors and staff");
+            Console.WriteLine("3. Search for subjects");
+            Console.WriteLine();
 
-            string result = "";
-            foreach (char c in input)
+            Console.WriteLine("Enter your choice:");
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            switch (choice)
             {
-                if (char.IsDigit(c))
-                {
-                    result += c;
-                }
-                else
-                {
-                    result += char.ToUpper(c);
-                }
+                case 1:
+                    SearchStudents();
+                    break;
+                case 2:
+                    SearchProfessorsAndStaff();
+                    break;
+                case 3:
+                    SearchSubjects();
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
             }
-            Console.WriteLine("Result is: ");
-            Console.WriteLine(result);
-            */
+        }
 
-            //prob7
-            Console.WriteLine("Input a number: ");
-            int number = int.Parse(Console.ReadLine());
-            string binary = Convert.ToString(number, 2);
-            Console.WriteLine($"Binary representation of {number}: {binary}");
+        static void StudentLogin(string studentId)
+        {
+            Console.WriteLine("Student Login Successful");
+            Console.WriteLine("------------------------");
+            Console.WriteLine();
+
+            Console.WriteLine("1. Search for students");
+            Console.WriteLine("2. Search for professors");
+            Console.WriteLine("3. Search for subjects");
+            Console.WriteLine();
+
+            Console.WriteLine("Enter your choice:");
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    SearchStudents();
+                    break;
+                case 2:
+                    SearchProfessors();
+                    break;
+                case 3:
+                    SearchSubjects();
+                    break;
+                default:
+                    Console.WriteLine("Wrong choice.");
+                    break;
+            }
+        }
+
+        static void SearchStudents()
+        {
+            Console.WriteLine("Search for students:");
+            Console.WriteLine("--------------------");
+            Console.WriteLine();
+
+            // Perform student search logic here
+            Console.WriteLine("Showing search results...");
+        }
+
+        static void SearchProfessorsAndStaff()
+        {
+            Console.WriteLine("Search for professors and staff:");
+            Console.WriteLine("--------------------------------");
+            Console.WriteLine();
+
+            // Perform professor and staff search logic here
+            Console.WriteLine("Showing search results...");
+        }
+
+        static void SearchProfessors()
+        {
+            Console.WriteLine("Search for professors:");
+            Console.WriteLine("----------------------");
+            Console.WriteLine();
+
+            // Perform professor search logic here
+            Console.WriteLine("Showing search results");
+        }
+
+        static void SearchSubjects()
+        {
+            Console.WriteLine("Search for subjects:");
+            Console.WriteLine("--------------------");
+            Console.WriteLine();
+
+            // Perform subject search logic here
+            Console.WriteLine("Showing search results");
+        }
+    }
+
+    class Person
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+
+        public Person(string id, string name, string phoneNumber, string email)
+        {
+            Id = id;
+            Name = name;
+            PhoneNumber = phoneNumber;
+            Email = email;
+        }
+    }
+
+    class Professor : Person
+    {
+        public string Designation { get; set; }
+        public Department Department { get; set; }
+
+        public Professor(string id, string name, string phoneNumber, string email, string designation, Department department)
+            : base(id, name, phoneNumber, email)
+        {
+            Designation = designation;
+            Department = department;
+        }
+
+        public override string ToString()
+        {
+            return $"Professor ID: {Id}\nName: {Name}\nPhone: {PhoneNumber}\nEmail: {Email}\nDesignation: {Designation}\nDepartment: {Department.Name}\n";
+        }
+    }
+
+    class Staff : Person
+    {
+        public string Role { get; set; }
+        public decimal Salary { get; set; }
+
+        public Staff(string id, string name, string phoneNumber, string email, string role, decimal salary)
+            : base(id, name, phoneNumber, email)
+        {
+            Role = role;
+            Salary = salary;
+        }
+
+        public override string ToString()
+        {
+            return $"Staff ID: {Id}\nName: {Name}\nPhone: {PhoneNumber}\nEmail: {Email}\nRole: {Role}\nSalary: {Salary}\n";
+        }
+    }
+
+    class Student : Person
+    {
+        public Department Department { get; set; }
+        public List<Subject> EnrolledSubjects { get; set; }
+
+        public Student(string id, string name, string phoneNumber, string email, Department department)
+            : base(id, name, phoneNumber, email)
+        {
+            Department = department;
+            EnrolledSubjects = new List<Subject>();
+        }
+
+        public void EnrollSubject(Subject subject)
+        {
+            EnrolledSubjects.Add(subject);
+        }
+
+        public override string ToString()
+        {
+            string subjectList = string.Join(", ", EnrolledSubjects);
+
+            return $"Student ID: {Id}\nName: {Name}\nPhone: {PhoneNumber}\nEmail: {Email}\nDepartment: {Department.Name}\nEnrolled Subjects: {subjectList}\n";
+        }
+    }
+
+    class Subject
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public Professor Professor { get; set; }
+
+        public Subject(string code, string name, Professor professor)
+        {
+            Code = code;
+            Name = name;
+            Professor = professor;
+        }
+
+        public override string ToString()
+        {
+            return $"Subject Code: {Code}\nName: {Name}\nProfessor: {Professor.Name}\n";
+        }
+    }
+
+    class Department
+    {
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
+
+        public Department(string name, string address, string phoneNumber)
+        {
+            Name = name;
+            Address = address;
+            PhoneNumber = phoneNumber;
+        }
+
+        public override string ToString()
+        {
+            return $"Department Name: {Name}\nAddress: {Address}\nPhone: {PhoneNumber}\n";
         }
     }
 }
